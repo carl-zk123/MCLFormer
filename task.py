@@ -26,8 +26,6 @@ from torch.autograd import Variable
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.tensorboard import SummaryWriter
 from dataset.dataset_finetune_transformer import MOF_ID_Dataset
-# from dataset.dataset_finetune import collate_pool, get_train_val_test_loader
-#from model.cgcnn_finetune import CrystalGraphConvNet
 import warnings
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -41,7 +39,7 @@ warnings.warn("deprecated", FutureWarning)
 def _save_config_file(model_checkpoints_folder):
     if not os.path.exists(model_checkpoints_folder):
         os.makedirs(model_checkpoints_folder)
-        shutil.copy('./config_ft_transformer.yaml', os.path.join(model_checkpoints_folder, 'config_ft_transformer.yaml'))
+        shutil.copy('./config_ft_transformer.yaml', os.path.join(model_checkpoints_folder, 'config_ft_MCLFormer.yaml'))
 
 
 class FineTune(object):
@@ -335,17 +333,9 @@ class FineTune(object):
                     'MAE {mae_errors.val:.3f} ({mae_errors.avg:.3f})'.format(
                 bn, len(self.valid_loader), loss=losses,
                 mae_errors=mae_errors))
-             # 测试完成后可视化
-        # try:
-        #     self.visualize_attention(sample_idx=0, layer_idx=0)  # 可视化第一个样本的第0层
-        #     self.visualize_attention(sample_idx=0, layer_idx=-1) # 可视化最后一层
-        #     except Exception as e:
-        #     print(f"Attention visualization failed: {str(e)}")
+            
         with open(os.path.join(self.writer.log_dir, 'test_results.csv'), 'w') as f:
             writer = csv.writer(f)
-            # for cif_id, target, pred in zip(test_cif_ids, test_targets,
-            #                                 test_preds):
-            #     writer.writerow((cif_id, target, pred))
             for target, pred in zip(test_targets, test_preds):
                 writer.writerow((target, pred))
         
@@ -404,4 +394,5 @@ if __name__ == "__main__":
     df.to_csv(
         os.path.join(log_dir, fn),
         mode='a', index=False, header=False
+
     )
