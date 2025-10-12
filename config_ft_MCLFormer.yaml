@@ -3,7 +3,7 @@ epochs: 200
 eval_every_n_epochs: 1
 # fine_tune_from: ./training_results/pretraining
 fine_tune_from: scratch
-trained_with: 'CGCNN'
+trained_with: ''
 log_every_n_steps: 50
 gpu: cuda:0
 vocab_path: 'tokenizer/vocab_full.txt'
@@ -26,8 +26,7 @@ dataloader:
 dataset:
   data_name: 'hMOF_CO2_0.5'
   dataPath: './benchmark_datasets/hMOF/mofid/hMOF_CO2_0.5_small_mofid.csv'
-  # data_name: 'QMOF'
-  # dataPath: './benchmark_datasets/QMOF/mofid/QMOF_small_mofid.csv'
+
 
 Transformer:
   ntoken: 4021
@@ -36,5 +35,3 @@ Transformer:
   d_hid: 512
   nlayers: 6
   dropout: 0.1
-  #random_attention_ratio: 0.05
-  #local_attention_window: 50
