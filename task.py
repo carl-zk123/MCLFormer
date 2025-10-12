@@ -1,6 +1,6 @@
 
 from tokenizer.mof_tokenizer import MOFTokenizer
-from model.model_tu import TransformerRegressor, Transformer, RegressionHead
+from model.MCLFormer import TransformerRegressor, Transformer, RegressionHead
 from model.utils import *
 from datetime import datetime, timedelta
 from time import time
@@ -396,3 +396,4 @@ if __name__ == "__main__":
         mode='a', index=False, header=False
 
     )
+
