@@ -21,7 +21,7 @@ class MultiScaleConv(nn.Module):
         out = (self.conv3(x) + self.conv5(x) + self.conv7(x)) / 3
         out = out.transpose(1, 2)
         out = self.dropout(self.relu(out))
-        out = self.norm(out + identity)  # 残差+归一化
+        out = self.norm(out + identity) 
         return out
     
 class LightweightConv(nn.Module):
@@ -38,20 +38,7 @@ class LightweightConv(nn.Module):
         # x shape: [B, S, D]
         x = x.transpose(1, 2)  # -> [B, D, S]
         x = self.conv(x)
-        return x.transpose(1, 2)  # -> [B, S, D]
-
-class FusionConv(nn.Module):
-    def __init__(self, d_model):
-        super().__init__()
-        self.multi = MultiScaleConv(d_model)
-        self.light = LightweightConv(d_model)
-        self.norm = nn.LayerNorm(d_model)
-        self.dropout = nn.Dropout(0.1)
-
-    def forward(self, x):
-        out = self.multi(x) + self.light(x)  # 并行融合
-        return self.norm(self.dropout(out + x))  # 残差连接
-    
+        return x.transpose(1, 2)  # -> [B, S, D]    
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model: int, dropout: float = 0.1, max_len: int = 2048):
@@ -111,15 +98,15 @@ class Transformer(nn.Module):
 
     def forward(self, src: Tensor) -> Tensor:
         # 输入 shape: [batch_size, seq_len]
-        src = self.token_encoder(src) * math.sqrt(self.d_model)  # [B, S, D]
-        src = self.pos_encoder(src)                              # [B, S, D]
+        src = self.token_encoder(src) * math.sqrt(self.d_model) 
+        src = self.pos_encoder(src)                              
       
-        # src = self.multi_scale_conv(src)                        # [B, S, D]                              # [B, S, D]
+        # src = self.multi_scale_conv(src)                    
         src = self.light_weight_conv(src) 
-        lstm_out, _ = self.lstm(src)  # 现在可以安全解包
+        lstm_out, _ = self.lstm(src) 
         src = src + lstm_out  # 残差连接
 
-        # output = self.transformer_encoder(src)                   # [B, S, D]
+        # output = self.transformer_encoder(src)                
         output = self.transformer_encoder(src)
             
         return output
@@ -135,4 +122,5 @@ class TransformerRegressor(nn.Module):
         output = self.transformer(src)              # [B, S, D]
         output = self.regressionHead(output[:, 0:1, :])  # [B, 1, D] → [B, 1]
         return output
+
         
