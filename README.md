@@ -1,14 +1,10 @@
 # MCLFormer
 
-# Project Documentation
+## Project Documentation
 
-## Environment Setup
+### Environment Setup
 
 Before running `task.py`, please ensure the following Python libraries are installed:
 
 ```bash
 pip install transformers pandas scikit-learn plotly seaborn
-
-## Run
-```bash
-python task.py
