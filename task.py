@@ -39,7 +39,7 @@ warnings.warn("deprecated", FutureWarning)
 def _save_config_file(model_checkpoints_folder):
     if not os.path.exists(model_checkpoints_folder):
         os.makedirs(model_checkpoints_folder)
-        shutil.copy('./config_ft_transformer.yaml', os.path.join(model_checkpoints_folder, 'config_ft_MCLFormer.yaml'))
+        shutil.copy('./config_ft_MCLFormer.yaml', os.path.join(model_checkpoints_folder, 'config_ft_MCLFormer.yaml'))
 
 
 class FineTune(object):
@@ -353,7 +353,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args(sys.argv[1:])
 
-    config = yaml.load(open("config_ft_transformer.yaml", "r", encoding="utf-8"), Loader=yaml.FullLoader)
+    config = yaml.load(open("config_ft_MCLFormer.yaml", "r", encoding="utf-8"), Loader=yaml.FullLoader)
     print(config)
     config['dataloader']['randomSeed'] = args.seed
 
@@ -396,4 +396,5 @@ if __name__ == "__main__":
         mode='a', index=False, header=False
 
     )
+
 
